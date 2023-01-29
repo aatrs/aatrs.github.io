@@ -1,0 +1,39 @@
+<html style="background-color:#0D1117">
+
+<style>
+    .base  {color:#E0E0E0;font-family:Consolas;font-size:20px;margin:1em}
+    .quote {color:#408040;font-style:italic}
+    .dark  {color:#404040;font-style:italic}
+    .topic {color:#8080C0}
+    .ref   {color:#404080}
+    .item  {color:#404040}
+</style>
+
+<script>
+    fetch("./notes")
+    .then( (response) => response.blob() )
+    .then( (blob) => {
+        let reader = new FileReader();
+        reader.readAsText(blob);
+        reader.onload = (f) => {
+            document.getElementsByTagName("pre")[0].innerHTML = 
+            f.target.result
+            .replace(/(\".*\")/gm,         '<span class="quote">$1</span>')
+            .replace(/(\".*    \n.*\")/gm, '<span class="quote">$1</span>')
+            .replace(/(\[ref:.*\])/gm,     '<span class="ref"  >$1</span>')
+            .replace(/\n(:: .*)/gm,      '\n<span class="topic">$1</span>')
+            .replace(/\n(::: .*)/gm,     '\n<span class="topic">$1</span>')
+            .replace(/\n(:::: .*)/gm,    '\n<span class="topic">$1</span>')
+            .replace(/\n(  \* )/gm,      '\n<span class="item" >$1</span>')
+            .replace(/\n        First written: (.*)/gm,
+                    '\n<span class="dark">        First written: $1</span>')
+            .replace(/        \n([^]*?)\n\n/gm,
+                    '        \n<span class="quote">$1</span>\n\n');
+        };
+    }
+    );
+</script>
+
+<pre class="base"></pre>
+
+</html>

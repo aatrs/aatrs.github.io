@@ -1,0 +1,430 @@
+
+
+
+
+
+
+
+
+
+
+                Notes
+
+                    aatrs
+
+
+
+
+
+
+
+
+
+
+:: Table of Contents
+
+  * Preface
+  * Notations
+  * 2023-01-05: [Mathmatics] Filtration example
+  * 2023-01-05: [Mathmatics] Generating normal random number
+  * Reference
+
+
+
+
+
+
+
+
+
+
+:: Preface
+
+  * Materials for talks with my friends
+  * Plain text oriented: as an experiment
+  * Not serious; Just cookies
+  * I hope you enjoy the writing!
+
+
+
+
+
+
+
+
+
+
+:: Notations
+
+Here are some math notation guides in plain texts:
+
+  * https://www.integreat.ca/OL/docs/WritingMathPlainText.pdf
+  * https://pages.uoregon.edu/ncp/Courses/MathInPlainTextEmail.html
+  * https://cse.sc.edu/~fenner/latex-ASCII.pdf
+
+
+Also, the following notations are used:
+
+  * [ref:ref-name] : for reference; see ':: Reference'.
+
+  * "Diff_x f(x,y)" : the x-partial derivative of f
+
+  * "1_S" : a function with
+        "1_S (x) = 1" if x is in S,
+        "1_S (x) = 0" if x is not in S.
+
+
+
+
+
+
+
+
+
+
+:: [Mathmatics] Filtration example
+        First written: 2023-01-05
+
+We consider a probability space "(Omega, F, P)".
+  * Let F be the power set of Omega: 2^Omega
+  * Abusing notation: f in F when f is a F-measurable function.
+
+
+
+::: Rolling one dice
+
+Let "Omega = { d_1, d_2, ..., d_6 }", with the uniform probability P.
+
+Let F_i : a filtration(information structure) such that
+  * F_0 represents information structure before rolling a dice,
+  * F_1 represents information structure after rolling a dice.
+
+Note that
+  * The game "g_i := 1_{d_i}" is not in F_0,
+  * That means the set "{x : g_i(x) = 1}" is not in F_0,
+  * So we can derive that it should be "F_0 = {emptySet, Omega}".
+
+Note also that
+  * The game "g(d_i) := i" is in F_1.
+  * It should be that "F_1 = F".
+
+
+
+::: Rolling one dice
+
+We set
+        
+    Omega = { ( d_i, e_j ) : i, j from 1 to 6 },
+    P( { (d_i, f_j) } ) = 1/36.
+
+Let F_i : a filtration(information structure) s.t.
+  * F_0 represents information structure before rolling a dice,
+  * F_1 represents information structure after rolling the 1st dice,
+  * F_1 represents information structure after rolling the 2nd dice.
+
+Any non‑constant game can't be in F_0. So, "F_0 = {emptySet, Omega}".
+Trivially, F_2 = F.
+
+Note that
+  * The game "g_0( d_i, e_j ) := i" is not in F_0, but in F_1.
+  * Any game that the value is independent of the 2nd dice is in F_1,
+    but not in F_2 otherwise.
+  * Therefore, we have
+        
+    F_1 := { I_1, I_2, ..., I_6 },
+    I_i := { (d_i, e_j) : j from 1 to 6 }.
+
+
+
+
+
+
+
+
+
+
+:: [Mathmatics] Generating normal random number
+        First written: 2023-01-05
+    
+The following practical methods are well‑known:
+  * Box–Muller transform   [ref:Box_Muller_1958]
+  * Marsaglia polar method [ref:Marsaglia_1964]
+  * Ziggurat algorithm
+
+
+
+::: Box–Muller transform
+
+For independent uniform random variables U_1, U_2 on [0,1], let
+        
+    V_1 := sqrt[ -2 ln(U_1) ] cos(2 pi U_2),
+    V_2 := sqrt[ -2 ln(U_1) ] sin(2 pi U_2).
+
+Then V_1 and V_2 are independent and are standard normal.
+
+Indeed, the joint distributions satisfy the decomposition
+        
+    f_V = f_U / |J|
+        =   1 / |J|
+        = N_{V_1} N_{V_2}
+        = f_{V_1} f_{V_2}.
+
+Where, N is the PDF of the standard normal distribution.
+The jacobian |J|, with entry "|J|_{ij} = Diff_{U_j} V_i", is computed as
+        
+    |J| = - 2 pi / U_1
+        = - 2 pi exp( [ (V_1)^2 + (V_2)^2 ] / 2 ).
+
+
+
+::: Marsaglia polar method
+
+Let "S = (U_1)^2 + (U_2)^2", with U_i as the above.
+Under the condition "0 < S < 1", The random variables
+        
+    V_1 := U_1 sqrt[ -2 ln(S) / S ],
+    V_2 := U_2 sqrt[ -2 ln(S) / S ],
+
+are independent and standard normal.
+
+
+
+
+
+
+
+
+
+
+:: Perturbation theory
+        First written: 2023-01-06
+
+We consider the problem for u_ep with some (usually small) constant ep:
+        
+    [The main problem]
+    L_ep u_ep = v,
+
+where ep stands for epsilon, L^\ep is an operator.
+The Perturbation theory is for solving u_ep, based on the case ep = 0,
+which is tractable.
+
+We refer some popular texts on the perturbation theory:
+  * [ref:bender_orszag_1999]
+  * [ref:johnson_2004]
+
+
+
+::: Introduction
+
+We first set "L_ep = L_0 + ep I",
+  * where L_0 and I are linear operators independent of ep.
+  * Also, "L_ep = L_0" when we put ep = 0.
+
+The idea of the theory is to express u as the power series for ep, so
+        
+    u_ep = u_0 + ep u_1 + ep^2 u_2 + ...,
+    u_i = O(ep^0) = O(1).
+
+The superscript index notation is prefered in some texts,
+like u^i instead of u_i, and in that case,
+the notation does not mean the power(square, cube...) notation.
+
+Putting the series to the main problem,
+and arranging the terms, like arranging a polynomial for ep, we have
+        
+    L_0 (u_0) = v,
+    ep^{i+1} ( L^0 (u_{i+1}) + I (u_i) ) = 0,  i>0.
+
+where we assume
+        
+    |L_0 (u_i)| + |I (u_i)| = O(1).
+
+  * If the assumption holds, then, usually,
+    we are in the so-called "regular perturbation" problem.
+  * Suppose this does not hold; for example, "I (u_i) = O(1/ep)".
+    The case is called the "singular perturbation" problem; considered later.
+
+Other arrangements may be considered, however, this argument is reasonable.
+When ep is very small, this arrangement gives scale-consistant statement.
+Also, this helps the analysis with general value of ep.
+
+Reversely, if u_i satisfies the above equations,
+then, 'formally', u_ep, as the series, solves the main problem.
+
+Next, we are interested in the actual asymptotics of the series.
+For example, we consider the residual error "E_2" as
+        
+    E_2 = u_ep - u_0 - ep u_1.
+
+We expect that "E_2 = O(ep^2)" in some sense. Notice that
+        
+    L_ep (E_2) = ep^2 I (u_2).
+
+In general, some analysis may be required to justify the asymptotics.
+Since the problem is lienar, you may want so prove the the solution "w" of
+        
+    L_ep (w) = f,  f = O(1)
+
+is of O(1).
+
+Similarly, we can consider "E_i = O(ep^i)$,
+that is, the series converges as i goes to infinity, when ep < 1.
+
+
+
+::: Singular perturbation
+
+We go back to the arrangements
+        
+    L_0 (u_0) = v,
+    ep^{i+1} ( L^0 (u_{i+1}) + I (u_i) ) = 0,  i>0.
+
+Suppose that "I (u_i) = O(1/ep)", instead of O(1).
+The formulation is not valid anymore, so we should consider other approaches.
+
+The problems that are classified as the "singular perturbation" problem,
+have various aspacts, and many of the problems have the following properties:
+  * The operator I, rather than L_0, determines the "type" of the problem.
+    For example,
+        
+    L_0 (v) = Diff   v,
+    I   (v) = Diff^2 v.
+
+    Then the main problem is the second-order differential equations.
+    That is, the perturbation "changes" the problem.
+
+  * Some operator in the problem changes the scale of the applied.
+    For example, even though u_ep = O(1), It can be that "I (u_ep) = O(1/ep)".
+  
+  * Laurent of sense series may be considered to express the solution:
+        
+    u_ep = ... + ep^{-1} u_{-1} + u_0 + ep u_1 + ...
+
+  * The solution of the perturbed problem can be completely different from 
+    the solution of the unperturbed problem.
+
+The "singular perturbation theory" deals with
+understanding and techniques of solving the singularly perturbed problems.
+Usually, this theory consider the many specific problems,
+rather than general definitions or theorems like other mathmatical theories.
+
+
+
+::: Example : regularly perturbed differential equation
+        
+    ep y(x) + y'(x) = e^x, y(0) = 1.
+
+To be written...
+
+
+
+:::: Example : regularly perturbed quadratic equation
+        
+    x^2 + ep x - 1 = 0.
+
+To be written...
+
+
+
+:::: Example : singularly perturbed differential equation
+                
+    y(x) + ep y'(x) = e^x, y(0) = 0.
+
+To be written...
+
+
+
+:::: Example : singularly perturbed quadratic equation
+        
+    ep x^2 + x - 1 = 0.
+
+In this case, we can set
+        
+    L_0 (x) = x - 1,
+    I (x) = x^2.
+
+The unpertubed solution is "x_0 = 1".
+From this, we derive "x_ep = x_0 + ep x_1 + O(ep^2)", where
+        
+    ep (1 + ep x_1)^2 + ep x_1 = O(ep^2),
+    x_1 = -1.
+
+However, the problem should have two solutions,
+and the information for x_0 does not help to find the second solution.
+Observe that the operator "ep I" changes type of the problem.
+
+Reminding the graph of "ep I(x) = -L_0(x)",
+we can expect the second solution has scale O(1/ep).
+We set
+        
+    z_ep = ep^{-1} z_{-1} + z_0 + O(ep),
+
+So, we have
+        
+    ep ( ( z_{-1} )/ep + z_0 )^2 + ( z_{-1} )/ep + z_0 - 1 = O(ep),
+    ( z_{-1}^2 + z_{-1} )/ep + ( 2 z_{-1} z_0 + z_0 - 1 ) = O(ep).
+        
+    z_{-1}^2 + z_{-1} = 0,
+    2 z_{-1} z_0 + z_0 - 1 = 0.
+        
+    z_{-1} = -1,
+    z_0    =  1,
+    z_ep   = -1/ep + 1 + O(ep).
+
+We drop the case "z_{-1} = 0" since this revert the solution to be regular.
+
+Indeed, from the root formula for quadratic equation,
+        
+    x = [ -1 +- sqrt( 1 + 4 ep )                    ] / (2 ep)
+      = [ -1 +- ( 1 + 2 ep - (4 ep)^2/8 + O(ep^3) ) ] / (2 ep)
+      = [ -1 +- ( 1 + 2 ep - 2 ep^2               ) ] / (2 ep) + O(ep^2).
+
+So, each of +- gives
+        
+    x_+ = -1/ep + 1 + O(ep),
+    x_- =         1 -   ep  + O(ep^2).
+
+Compare them to x_ep and z_ep.
+
+
+
+
+
+
+
+
+
+
+:: Reference
+
+(Publishers omitted)
+
+
+
+    [ref:Box_Muller_1958]
+    Box, G. E. P.; Muller, Mervin E. (1958).
+    "A Note on the Generation of Random Normal Deviates".
+    
+    [ref:Marsaglia_1964]
+    Marsaglia, G.; Bray, T. A. (1964).
+    "A Convenient Method for Generating Normal Variables". 
+
+    [ref:Bender_Orszag_1999]
+    Carl M. Bender; Steven A. Orszag (1999).
+    "Advanced Mathematical Methods for Scientists and Engineers I -    
+    Asymptotic Methods and Perturbation Theory".
+
+    [ref:Johnson_2004]
+    Johnson, R. S. (2004).
+    "Singular Perturbation Theory".
+
+
+
+
+
+
+
+
+
+
+(End of texts)
